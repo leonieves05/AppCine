@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seguridad de Contraseñas</title>
+</head>
+<body>
+
+  <h1>Registro y Autenticación</h1>
+
+  <form id="registrationForm">
+    <label for="username">Usuario:</label>
+    <input type="text" id="username" name="username" required>
+    <br>
+    <label for="password">Contraseña:</label>
+    <input type="password" id="password" name="password" required>
+    <br>
+    <button type="button" onclick="register()">Registrarse</button>
+  </form>
+
+  <form id="loginForm">
+    <label for="loginUsername">Usuario:</label>
+    <input type="text" id="loginUsername" name="loginUsername" required>
+    <br>
+    <label for="loginPassword">Contraseña:</label>
+    <input type="password" id="loginPassword" name="loginPassword" required>
+    <br>
+    <button type="button" onclick="login()">Iniciar Sesión</button>
+  </form>
+
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs/dist/bcrypt.min.js"></script>
+  <script>
+    async function hashPassword(password) {
+      const saltRounds = 10;
+      const salt = await bcrypt.genSalt(saltRounds);
+      return bcrypt.hash(password, salt);
+    }
+
+    async function register() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const hashedPassword = await hashPassword(password);
+
+      // Aquí deberías enviar el usuario y la contraseña hasheada al servidor para el almacenamiento seguro.
+      // En un entorno real, se usaría una conexión segura y se almacenaría en una base de datos.
+
+      console.log(`Usuario: ${username}, Contraseña hasheada: ${hashedPassword}`);
+      alert('Registro exitoso');
+    }
+
+    async function login() {
+      const loginUsername = document.getElementById('loginUsername').value;
+      const loginPassword = document.getElementById('loginPassword').value;
+
+      // En un entorno real, deberías obtener la contraseña hasheada almacenada en el servidor.
+      // A continuación, se simula el proceso de obtención de la contraseña hasheada.
+
+      const storedHashedPassword = await hashPassword('contraseña'); // Reemplaza 'contraseña' con la contraseña real almacenada en el servidor.
+
+      // Compara la contraseña proporcionada con la almacenada
+      const isPasswordCorrect = await bcrypt.compare(loginPassword, storedHashedPassword);
+
+      if (isPasswordCorrect) {
+        alert('Inicio de sesión exitoso');
+      } else {
+        alert('Credenciales incorrectas');
+      }
+    }
+  </script>
+
+</body>
+</html>
